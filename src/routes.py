@@ -4,14 +4,14 @@ from os import getenv
 from dotenv import load_dotenv
 
 load_dotenv()
-API_KEY = getenv('API_KEY')
+AUTH = getenv('AUTH')
 
 
 def get_response(model_id, params: dict):
     API_URL = f"https://api-inference.huggingface.co/models/{model_id}"
 
     headers = {
-        "Authorization": f"Bearer {API_KEY}",
+        "Authorization": f"Bearer {AUTH}",
         "Content-Type": "application/json",
         "x-wait-for-model": "true",
 
