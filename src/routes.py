@@ -7,7 +7,16 @@ load_dotenv()
 AUTH = getenv('AUTH')
 
 
-def get_response(model_id, params: dict):
+def get_response_from_model(model_id, data: dict) -> dict:
+    """_summary_
+
+    Args:
+        model_id (string): like "facebook/bart-large-cnn"
+        data (dict): input data to the model and praameters
+
+    Returns:
+        dict: response from the model
+    """
     API_URL = f"https://api-inference.huggingface.co/models/{model_id}"
 
     headers = {
@@ -15,10 +24,6 @@ def get_response(model_id, params: dict):
         "Content-Type": "application/json",
         "x-wait-for-model": "true",
 
-    }
-    data = {
-        "inputs": "Can you please let us know more details about your ",
-        "parameters": params
     }
 
     response = requests.post(API_URL, headers=headers, json=data)
