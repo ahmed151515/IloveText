@@ -28,3 +28,19 @@ def get_response_from_model(model_id, data: dict) -> dict:
 
     response = requests.post(API_URL, headers=headers, json=data)
     return response.json()
+
+# code of translation model
+"""
+from transformers import M2M100Tokenizer
+tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_418M")
+print(get_response_from_model("facebook/m2m100_418M",
+      {
+          "inputs": "Ich habe eine Prüfung",  # النص المراد ترجمته
+          "parameters": {
+              # ID اللغة العربية، يمكنك استخدام هذا الرقم كتعريف للغة الهدف
+              "forced_bos_token_id": tokenizer.get_lang_id("en"),
+          }
+      }
+))
+
+"""
