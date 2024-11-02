@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IloveText
+    </title>
+</head>
+
+<body>
+    {%for route in routes%}
+    <input type="button" value="{{route}}" onclick="window.location.href='{{ url_for(route) }}'">
+    {%endfor%}
+</body>
+
+</html>
