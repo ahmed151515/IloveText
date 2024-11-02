@@ -2,7 +2,7 @@ from src import app
 import requests
 from os import getenv
 from dotenv import load_dotenv
-from .forms import SummarizeForm
+from .forms import SummarizeForm, InputForm
 from flask import render_template
 load_dotenv()
 AUTH = getenv('AUTH')
@@ -59,3 +59,21 @@ def summarize():
         form.result.data = result
 
     return render_template('summarize.html', form=form)
+
+@app.route('/translate')
+def translation():
+    """
+    """
+    from transformers import M2M100Tokenizer
+
+    form = InputForm()
+
+    tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_418M")
+    print(get_response_from_model("facebook/m2m100_418M",
+    {
+        "inputs": form.input.data,
+        "parameters": {
+                        "forced_bos_token_id": tokenizer.get_lang_id("en"),
+        }
+    }
+))
