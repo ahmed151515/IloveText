@@ -33,26 +33,30 @@ def get_response_from_model(model_id, data: dict) -> dict:
     return response.json()
 
 
+@app.route('/')
+def home():
+    routse = [i.endpoint for i in app.url_map.iter_rules()]
+    del routse[0:2]
+    return render_template('home.html', routes=routse)
+
+
 @app.route('/summarize', methods=["GET", 'POST'])
 def summarize():
     form = SummarizeForm()
     if form.validate_on_submit():
         text = form.text.data
-        model_id = "meta-llama/Llama-3.2-3B-Instruct"
+        model_id = "facebook/bart-large-cnn"
         response = get_response_from_model(
             model_id,
             {
-                "inputs": f"Summarize the following text without adding any introductory phrases or extra text: {text}",
-                "parameters": {"return_full_text": False,
-                               "watermark": False,
-                               "do_sample": True,  # Enable sampling to get different responses
-                               "top_k": 50,        # Top-k sampling
-                               "top_p": 0.95       # Top-p (nucleus) sampling
-                               },
+                "inputs": text,
+                "parameters": {
+                    "max_length": 300, "min_length": 50, "do_sample": False,
+                },
             })
-        result = response[0].get("generated_text").splitlines()
-        # del result[0:3]
-        form.result.data = "\n".join(result)
+        result = response[0].get("summary_text")
+
+        form.result.data = result
 
     return render_template('summarize.html', form=form)
 
