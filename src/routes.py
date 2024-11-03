@@ -11,7 +11,7 @@ app.secret_key = "secret"
 def home():
     routse = [i.endpoint for i in app.url_map.iter_rules()]
     del routse[0:2]
-    return render_template('home.html', routes=routse)
+    return render_template('home.html', routes=routse, enumerate=enumerate, ls=range(10), condtion=lambda i: i % 3 == 0)
 
 
 @app.route('/summarize', methods=["GET", 'POST'])
@@ -39,10 +39,10 @@ def summarize():
 def translation():
     """
     Route handler for the '/translate' endpoint.
-    
+
     This function loads a tokenizer from the Hugging Face `transformers` library,
     specifically the M2M100Tokenizer, which is used for multilingual text translation.
-    
+
     Steps:
     1. Creates an instance of `InputForm` to handle user input.
     2. Loads the M2M100 tokenizer with the pre-trained model "facebook/m2m100_418M".
