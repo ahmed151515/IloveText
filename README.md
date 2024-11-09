@@ -14,7 +14,7 @@ This project provides a web application built with Flask for performing various 
 To run the project locally, follow these steps:
 
 1. Clone the repository:
-   ```bash
+```bash
    git clone https://github.com/ahmed151515/IloveText.git
    ```
 
@@ -22,18 +22,18 @@ To run the project locally, follow these steps:
 
 2. Navigate to the project directory:
 
-   ```bash
+```bash
    cd IloveText
    ```
 
 3. Install the required dependencies:
 
-   ```bash
+```bash
    pip install -r requirements.txt
    ```
 
 4. Run the Flask app:
-   ```bash
+```bash
    python run.py
    ```
 
