@@ -1,3 +1,4 @@
+from langdetect import detect
 from src import app
 
 from .forms import InputForm, TranslationForm, languages
@@ -5,6 +6,10 @@ from flask import render_template
 from .functions import get_response_from_model, translate
 
 app.secret_key = "secret"
+
+
+def detect_language(text: str) -> str:
+    return detect(text)[:2]
 
 
 @app.route('/')
@@ -20,6 +25,9 @@ def summarize():
     if form.validate_on_submit():
         text = form.text.data
         model_id = "facebook/bart-large-cnn"
+        lang = detect_language(text)
+        if lang != "en":
+            text = translate(text, "en")
         response = get_response_from_model(
             model_id,
             {
@@ -29,7 +37,8 @@ def summarize():
                 },
             })
         result = response[0].get("summary_text")
-
+        if lang != "en":
+            result = translate(result, lang)
         form.result.data = result
 
     return render_template('summarize.html', form=form)
@@ -57,7 +66,9 @@ def translation():
     if form.validate_on_submit():
         text = form.text.data
         language = form.language.data
+
         result = translate(text, languages.get(language))
+
         form.result.data = result
 
     return render_template('translation.html', form=form)

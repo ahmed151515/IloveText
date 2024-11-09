@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length
 from wtforms import TextAreaField, SubmitField, SelectField
 
 
@@ -28,11 +28,13 @@ languages = {
     "Ukrainian": "uk", "Urdu": "ur", "Uzbek": "uz", "Vietnamese": "vi", "Wolof": "wo",
     "Xhosa": "xh", "Yiddish": "yi", "Yoruba": "yo", "Chinese": "zh", "Zulu": "zu"
 }
-
+languages = dict(sorted(languages.items()))
 
 class InputForm(FlaskForm):
     text = TextAreaField('Text', render_kw={"rows": row, "cols": col}, validators=[
-                         DataRequired()])
+                         DataRequired(),
+                         #  Length(max=300)
+                         ])
     submit = SubmitField('Summarize')
     result = TextAreaField('Result', render_kw={
                            'readonly': True, "rows": row, "cols": col})
@@ -40,7 +42,5 @@ class InputForm(FlaskForm):
 
 class TranslationForm(InputForm):
 
-    language = SelectField('Language', choices=languages.keys)
+    language = SelectField('Language', choices=languages.keys())
     submit = SubmitField('Translate')
-    result = TextAreaField('Result', render_kw={
-                           'readonly': True, "rows": row, "cols": col})

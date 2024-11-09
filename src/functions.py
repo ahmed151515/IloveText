@@ -1,8 +1,14 @@
+from transformers import M2M100Tokenizer
 import requests
 from os import getenv
 from dotenv import load_dotenv
-load_dotenv()
+from nltk.tokenize import sent_tokenize
+import nltk
+# nltk.download('punkt_tab', quiet=True)
+# load_dotenv()
 AUTH = getenv('AUTH')
+
+
 
 
 def get_response_from_model(model_id, data: dict) -> dict:
@@ -29,28 +35,32 @@ def get_response_from_model(model_id, data: dict) -> dict:
     return response.json()
 
 
-def translate(text: str, language: str) -> str:
-    """translate text to the given language
-
-    Args:
-        text (str): text to translate
-        language (str): language to translate to like "ar"for Arabic
-
-    Returns:
-        str: translated text
-    """
-    from transformers import M2M100Tokenizer
-
+def translate(text: str, language: str, max_tokens: int = 150) -> str:
     tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_418M")
-    result = get_response_from_model("facebook/m2m100_418M",
-                                     {
-                                         "inputs": text,
-                                         "parameters": {
-                                             "forced_bos_token_id": tokenizer.get_lang_id(language),
+    tokenized_text = tokenizer.encode(text)
+
+    chunks = [tokenized_text[i:i + max_tokens]
+              for i in range(0, len(tokenized_text), max_tokens)]
+    translated_chunks = []
+
+    for chunk in chunks:
+        chunk_text = tokenizer.decode(chunk, skip_special_tokens=True)
+        result = get_response_from_model("facebook/m2m100_418M",
+                                         {
+                                             "inputs": chunk_text,
+                                             "parameters": {
+                                                 "forced_bos_token_id": tokenizer.get_lang_id(language),
+                                             }
                                          }
-                                     }
-                                     )
+                                         )
+        translated_chunks.append(result[0].get("generated_text"))
 
-    print(result)
+    return " ".join(translated_chunks)
 
-    return result[0].get("generated_text")
+
+def translate_long_text(text, language):
+    sentences = sent_tokenize(text)
+    translated_text = []
+    for sentence in sentences:
+        translated_text.append(translate(sentence, language))
+    return " ".join(translated_text)

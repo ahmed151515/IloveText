@@ -4,3 +4,4 @@ requests
 python-dotenv
 sentencepiece
 transformers
+langdetect
