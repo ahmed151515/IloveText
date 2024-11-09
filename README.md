@@ -11,33 +11,33 @@ This project provides a web application built with Flask for performing various 
 
 ## Installation
 
-To run the project locally, follow these steps:
+### To run the project locally, follow these steps:
 
 1. Clone the repository:
-```bash
-   git clone https://github.com/ahmed151515/IloveText.git
-   ```
 
-````
+```bash
+git clone https://github.com/ahmed151515/IloveText.git
+```
 
 2. Navigate to the project directory:
 
 ```bash
-   cd IloveText
-   ```
+cd IloveText
+```
 
 3. Install the required dependencies:
 
 ```bash
-   pip install -r requirements.txt
-   ```
+pip install -r requirements.txt
+```
 
 4. Run the Flask app:
-```bash
-   python run.py
-   ```
 
-The application should now be accessible at `http://127.0.0.1:5000/`.
+```bash
+python run.py
+```
+
+### The application should now be accessible at `http://127.0.0.1:5000/`.
 
 ## Routes
 
@@ -57,4 +57,3 @@ The application should now be accessible at `http://127.0.0.1:5000/`.
 2. **Translate**:
    - The user inputs a text and selects a target language.
    - The text is translated into the selected language using the pre-trained M2M100 model.
-````
