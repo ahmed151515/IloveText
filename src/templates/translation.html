@@ -1,32 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>translation</title>
-</head>
-
-<body>
-    <h1>Translation</h1>
-    <form method="post">
-        {{form.hidden_tag() }}
-        <div>
-            <h1>{{form.text.label}}</h1>
-            {{form.text()}}
-        </div>
-        <div>
-            <h1>Translate to</h1>
-            {{form.language()}}
-        </div>
-        <div>
-            <h1>{{form.result.label}}</h1>
-            {{form.result()}}
-        </div>
-        <div>
-            {{form.submit()}}
-        </div>
-    </form>
-</body>
-
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<h1>Translation</h1>
+<form method="post">
+    {{form.hidden_tag() }}
+    <div>
+        <h1>{{form.text.label}}</h1>
+        {{form.text()}}
+    </div>
+    <div>
+        <h1>Translate to</h1>
+        {{form.language()}}
+    </div>
+    <div>
+        <h1>{{form.result.label}}</h1>
+        {{form.result()}}
+    </div>
+    <div>
+        {{form.submit()}}
+    </div>
+</form>
+{% endblock %}

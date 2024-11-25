@@ -3,13 +3,12 @@ from src import app
 
 from .forms import InputForm, TranslationForm, languages
 from flask import render_template
-from .functions import get_response_from_model, translate
+from .functions import translate, summarize
 
 app.secret_key = "secret"
 
 
-def detect_language(text: str) -> str:
-    return detect(text)[:2]
+
 
 
 @app.route('/')
@@ -20,26 +19,12 @@ def home():
 
 
 @app.route('/summarize', methods=["GET", 'POST'])
-def summarize():
+def summarizetion():
     form = InputForm()
     if form.validate_on_submit():
         text = form.text.data
-        model_id = "facebook/bart-large-cnn"
-        lang = detect_language(text)
-        if lang != "en":
-            text = translate(text, "en")
-        response = get_response_from_model(
-            model_id,
-            {
-                "inputs": text,
-                "parameters": {
-                    "max_length": 300, "min_length": 50, "do_sample": False,
-                },
-            })
-        result = response[0].get("summary_text")
-        if lang != "en":
-            result = translate(result, lang)
-        form.result.data = result
+
+        form.result.data = summarize(text)
 
     return render_template('summarize.html', form=form)
 

@@ -1,14 +1,13 @@
+from langdetect import detect
+
 from transformers import M2M100Tokenizer
 import requests
 from os import getenv
 from dotenv import load_dotenv
-from nltk.tokenize import sent_tokenize
-import nltk
-# nltk.download('punkt_tab', quiet=True)
-# load_dotenv()
+
+
+load_dotenv()
 AUTH = getenv('AUTH')
-
-
 
 
 def get_response_from_model(model_id, data: dict) -> dict:
@@ -58,9 +57,23 @@ def translate(text: str, language: str, max_tokens: int = 150) -> str:
     return " ".join(translated_chunks)
 
 
-def translate_long_text(text, language):
-    sentences = sent_tokenize(text)
-    translated_text = []
-    for sentence in sentences:
-        translated_text.append(translate(sentence, language))
-    return " ".join(translated_text)
+def detect_language(text: str) -> str:
+    return detect(text)[:2]
+
+
+def summarize(text: str, model_id: str = "facebook/bart-large-cnn") -> str:
+    lang = detect_language(text)
+    if lang != "en":
+        text = translate(text, "en")
+    response = get_response_from_model(
+        model_id,
+        {
+            "inputs": text,
+            "parameters": {
+                "do_sample": False,
+            },
+        })
+    result = response[0].get("summary_text")
+    if lang != "en":
+        result = translate(result, lang)
+    return result

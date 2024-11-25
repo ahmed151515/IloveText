@@ -1,10 +1,99 @@
-.button-container {
-    flex-basis: 30%; 
-    margin: 5px; 
-    height: 50px; 
+/* Default light mode styles */
+body {
+    background-color: white;
+    color: black;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
-.button-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+
+header, footer {
+    background-color: #f1f1f1;
+    color: black;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 15px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Styling for text areas */
+textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212;
+        color: white;
+    }
+
+    header, footer {
+        background-color: #1f1f1f;
+        color: white;
+    }
+
+    a {
+        color: #80aaff;
+    }
+
+    a:hover {
+        color: #ffffff;
+    }
+
+    textarea {
+        background-color: #333;
+        color: white;
+        border: 1px solid #555;
+    }
+
+    textarea:focus {
+        border-color: #80aaff;
+    }
+
+    button {
+        background-color: #80aaff;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
 }
