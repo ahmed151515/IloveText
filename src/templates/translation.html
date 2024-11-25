@@ -2,21 +2,25 @@
 {% block content %}
 <h1>Translation</h1>
 <form method="post">
-    {{form.hidden_tag() }}
-    <div>
-        <h1>{{form.text.label}}</h1>
-        {{form.text()}}
+    {{ form.hidden_tag() }}
+    
+    <div class="form-group">
+        <label for="{{ form.text.id }}">{{ form.text.label }}</label>
+        {{ form.text(class="form-control") }}
     </div>
-    <div>
-        <h1>Translate to</h1>
-        {{form.language()}}
+
+    <div class="form-group">
+        <label for="{{ form.language.id }}">Translate to</label>
+        {{ form.language(class="form-control") }}
     </div>
-    <div>
-        <h1>{{form.result.label}}</h1>
-        {{form.result()}}
+
+    <div class="form-group">
+        <label for="{{ form.result.id }}">{{ form.result.label }}</label>
+        {{ form.result(class="form-control") }}
     </div>
-    <div>
-        {{form.submit()}}
+
+    <div class="form-group">
+        {{ form.submit(class="btn-submit") }}
     </div>
 </form>
 {% endblock %}

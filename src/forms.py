@@ -4,7 +4,7 @@ from wtforms import TextAreaField, SubmitField, SelectField
 
 
 row = 10
-col = 100
+col = 70
 languages = {
     "Afrikaans": "af", "Amharic": "am", "Arabic": "ar", "Asturian": "ast", "Azerbaijani": "az",
     "Bashkir": "ba", "Belarusian": "be", "Bulgarian": "bg", "Bengali": "bn", "Breton": "br",
