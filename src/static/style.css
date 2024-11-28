@@ -84,7 +84,7 @@ h1 {
 }
 
 .button-container:hover {
-    background-color: #4CAF50; /* Green hover effect */
+    background-color: #a43d3d; /* Green hover effect */
     transform: scale(1.05);
 }
 
@@ -120,7 +120,7 @@ input[type="text"], select {
 }
 
 input[type="text"]:focus, select:focus {
-    border-color: #4CAF50; /* Green focus border */
+    border-color: #a43d3d; /* Green focus border */
     outline: none;
 }
 
@@ -136,7 +136,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #4CAF50; /* Green hover effect */
+    background-color: #a43d3d; /* Green hover effect */
     transform: scale(1.05);
 }
 
@@ -181,7 +181,7 @@ footer p {
 
 /* Focus state for form control inputs */
 .form-control:focus {
-    border-color: #4CAF50; /* Green focus border */
+    border-color: #a43d3d; /* Green focus border */
     outline: none;
     background-color: #282828; /* Slightly darker background when focused */
 }
@@ -201,7 +201,7 @@ footer p {
 }
 
 .btn-submit:hover {
-    background-color: #4CAF50; /* Green hover effect */
+    background-color: #a43d3d; /* Green hover effect */
     transform: scale(1.05);
 }
 
