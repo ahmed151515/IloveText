@@ -1,4 +1,4 @@
-from langdetect import detect
+import langid
 
 from transformers import M2M100Tokenizer
 import requests
@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 AUTH = getenv("AUTH")
+
+TOXIC_MASGEE = "The text is toxic. Please change it."
 
 
 def get_response_from_model(model_id, data: dict) -> dict:
@@ -45,7 +47,7 @@ def IsToxic(text: str):
 
 def translate(text: str, language: str, max_tokens: int = 150) -> str:
     if IsToxic(text):
-        raise ValueError("toxic text")
+        return TOXIC_MASGEE
     tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_418M")
     tokenized_text = tokenizer.encode(text)
 
@@ -72,16 +74,19 @@ def translate(text: str, language: str, max_tokens: int = 150) -> str:
 
 
 def detect_language(text: str) -> str:
-    return detect(text)[:2]
+    lang, confidence = langid.classify(text)
+    print(f"Detected language: {lang} with confidence {confidence}")
+    return lang
 
 
 def summarize(text: str, model_id: str = "facebook/bart-large-cnn") -> str:
-
+    
     lang = detect_language(text)
+    
     if lang != "en":
         text = translate(text, "en")
     if IsToxic(text):
-        raise ValueError("toxic text")
+        return TOXIC_MASGEE
     response = get_response_from_model(
         model_id,
         {

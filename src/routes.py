@@ -53,7 +53,7 @@ def translation():
         language = form.language.data
 
         result = translate(text, languages.get(language))
-
+        
         form.result.data = result
 
     return render_template('translation.html', form=form)
