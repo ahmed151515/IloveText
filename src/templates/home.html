@@ -1,11 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="button-wrapper">
-    {% for i, route in enumerate(routes) %}
-        <input type="button" value="{{ route }}" onclick="window.location.href='{{ url_for(route) }}'" class="button-container">
-        {% if condtion(i) %}
-            <br>
-        {% endif %}
-    {% endfor %}
-</div>
+<main>
+    <h1>Welcome to IloveText</h1>
+    <p class="intro-text">Discover the power of intelligent text processing in Arabic and English</p>
+    
+    <div class="button-wrapper">
+        {% for route in routes %}
+            <div class="feature-card">
+                <div class="icon-wrapper">
+                    {% if route == 'summarize' %}
+                        <i class="fas fa-compress-alt"></i>
+                    {% elif route == 'translate' %}
+                        <i class="fas fa-language"></i>
+                    {% endif %}
+                </div>
+                <h3>{{ route | title }}</h3>
+                <p class="feature-description">
+                    {% if route == 'summarize' %}
+                        Intelligently summarize your texts using AI technology
+                    {% elif route == 'translate' %}
+                        Translate between languages with high accuracy and deep context understanding
+                    {% endif %}
+                </p>
+                <button onclick="window.location.href='{{ url_for(route) }}'" class="button-container">
+                    Start Now
+                    <span class="button-arrow">→</span>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+</main>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}

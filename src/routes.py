@@ -57,3 +57,4 @@ def translation():
         form.result.data = result
 
     return render_template('translation.html', form=form)
+

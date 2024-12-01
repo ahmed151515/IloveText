@@ -31,16 +31,36 @@ languages = {
 languages = dict(sorted(languages.items()))
 
 class InputForm(FlaskForm):
-    text = TextAreaField('Text', render_kw={"rows": row, "cols": col}, validators=[
-                         DataRequired(),
-                         #  Length(max=300)
-                         ])
-    submit = SubmitField('Summarize')
-    result = TextAreaField('Result', render_kw={
-                           'readonly': True, "rows": row, "cols": col})
+    text = TextAreaField('Enter your text here', render_kw={
+        "rows": row,
+        "cols": col,
+        "placeholder": "Type or paste your text here..."
+    }, validators=[DataRequired()])
+    
+    submit = SubmitField('Generate Summary')
+    
+    result = TextAreaField('Summary Result', render_kw={
+        'readonly': True,
+        "rows": row,
+        "cols": col,
+        "placeholder": "Your summary will appear here..."
+    })
 
 
-class TranslationForm(InputForm):
-
-    language = SelectField('Language', choices=languages.keys())
-    submit = SubmitField('Translate')
+class TranslationForm(FlaskForm):
+    text = TextAreaField('Enter text to translate', render_kw={
+        "rows": row,
+        "cols": col,
+        "placeholder": "Type or paste your text here..."
+    }, validators=[DataRequired()])
+    
+    language = SelectField('Select Target Language', choices=languages.keys())
+    
+    submit = SubmitField('Translate Text')
+    
+    result = TextAreaField('Translation Result', render_kw={
+        'readonly': True,
+        "rows": row,
+        "cols": col,
+        "placeholder": "Your translation will appear here..."
+    })
