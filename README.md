@@ -114,7 +114,3 @@ The project uses Hugging Face's Inference API for accessing various models:
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is open source and available under the MIT License.
