@@ -1,5 +1,97 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    animation: fadeIn 0.3s;
+    /* Center content vertically */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.modal-content {
+    position: relative;
+    background-color: #000000;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 800px;
+    animation: slideIn 0.3s;
+    margin: 0;
+    text-align: center;
+    border: 2px solid #333;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+@keyframes slideIn {
+    from {transform: translateY(-50px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+}
+
+.close-button {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #dc3545;
+}
+
+.error-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.error-button:hover {
+    background-color: #000000;
+}
+
+.modal-content img {
+    width: 90%;
+    height: auto;
+    border-radius: 4px;
+    margin: 20px auto;
+    display: block;
+    border: 2px solid #333;
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+</style>
+
 <main>
     <h1>Text Translation</h1>
     <p class="feature-description">Translate your text between multiple languages with high accuracy</p>
@@ -25,6 +117,21 @@
             </div>
         </div>
 
+        {% if show_error %}
+        <button type="button" class="error-button" onclick="openModal()">
+            <span>⚠️</span>
+            <span>Translation failed. Click for details</span>
+        </button>
+
+        <div id="errorModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeModal()">&times;</span>
+                <h2>Translation Error</h2>
+                <img src="{{ url_for('static', filename='img.jpeg') }}" alt="Error Image">
+            </div>
+        </div>
+        {% endif %}
+
         <div class="form-group result-group">
             <label for="{{ form.result.id }}" class="form-label">{{ form.result.label }}</label>
             {{ form.result(class="form-control") }}
@@ -36,6 +143,31 @@
 document.querySelector('form').addEventListener('submit', function() {
     this.querySelector('.loading-container').style.display = 'block';
     this.querySelector('.button-container').style.display = 'none';
+});
+
+function openModal() {
+    document.getElementById('errorModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('errorModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    var modal = document.getElementById('errorModal');
+    if (event.target == modal) {
+        closeModal();
+    }
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeModal();
+    }
 });
 </script>
 {% endblock %}

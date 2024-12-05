@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 AUTH = getenv("AUTH")
 
-TOXIC_MASGEE = "The text is toxic. Please change it."
+TOXIC_MASGEE = False
 
 
 def get_response_from_model(model_id, data: dict) -> dict:
@@ -47,7 +47,7 @@ def IsToxic(text: str):
 
 def translate(text: str, language: str, max_tokens: int = 150) -> str:
     if IsToxic(text):
-        return TOXIC_MASGEE
+        return (TOXIC_MASGEE, "")
     tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_418M")
     tokenized_text = tokenizer.encode(text)
 
@@ -70,7 +70,7 @@ def translate(text: str, language: str, max_tokens: int = 150) -> str:
         )
         translated_chunks.append(result[0].get("generated_text"))
 
-    return " ".join(translated_chunks)
+    return (True," ".join(translated_chunks))
 
 
 def detect_language(text: str) -> str:
