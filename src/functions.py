@@ -79,24 +79,41 @@ def detect_language(text: str) -> str:
     return lang
 
 
-def summarize(text: str, model_id: str = "facebook/bart-large-cnn") -> str:
-    
-    lang = detect_language(text)
-    
-    if lang != "en":
-        text = translate(text, "en")
-    if IsToxic(text):
-        return TOXIC_MASGEE
-    response = get_response_from_model(
-        model_id,
-        {
-            "inputs": text,
-            "parameters": {
-                "do_sample": False,
+def summarize(text: str, model_id: str = "facebook/bart-large-cnn"):
+    try:
+        lang = detect_language(text)
+        
+        if lang != "en":
+            success, translated_text = translate(text, "en")
+            if not success:
+                return False, "img.jpeg"
+            text = translated_text
+
+        if IsToxic(text):
+            return False, "img.jpeg"
+
+        response = get_response_from_model(
+            model_id,
+            {
+                "inputs": text,
+                "parameters": {
+                    "do_sample": False,
+                },
             },
-        },
-    )
-    result = response[0].get("summary_text")
-    if lang != "en":
-        result = translate(result, lang)
-    return result
+        )
+
+        if not response or "error" in response:
+            return False, "img.jpeg"
+
+        result = response[0].get("summary_text")
+        
+        if lang != "en":
+            success, translated_result = translate(result, lang)
+            if not success:
+                return False, "img.jpeg"
+            result = translated_result
+
+        return True, result
+    except Exception as e:
+        print(f"Summarization error: {str(e)}")
+        return False, "img.jpeg"
