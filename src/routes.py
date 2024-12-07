@@ -1,21 +1,26 @@
-from langdetect import detect
 from src import app
 
 from .forms import InputForm, TranslationForm, languages
 from flask import render_template, url_for
-from .functions import translate, summarize
+from .functions import translate, summarize, detect_language
 
 app.secret_key = "secret"
 
 
-@app.route('/')
+@app.route("/")
 def home():
     routse = [i.endpoint for i in app.url_map.iter_rules()]
     del routse[0:2]
-    return render_template('home.html', routes=routse, enumerate=enumerate, ls=range(10), condtion=lambda i: i % 3 == 0)
+    return render_template(
+        "home.html",
+        routes=routse,
+        enumerate=enumerate,
+        ls=range(10),
+        condtion=lambda i: i % 3 == 0,
+    )
 
 
-@app.route('/summarize', methods=["GET", 'POST'])
+@app.route("/summarize", methods=["GET", "POST"])
 def summarizetion():
     form = InputForm()
     show_error = False
@@ -28,10 +33,10 @@ def summarizetion():
             show_error = True
             form.result.data = "Summarization failed. Please check the error details."
 
-    return render_template('summarize.html', form=form, show_error=show_error)
+    return render_template("summarize.html", form=form, show_error=show_error)
 
 
-@app.route('/translate', methods=["GET", 'POST'])
+@app.route("/translate", methods=["GET", "POST"])
 def translation():
     """
     Route handler for the '/translate' endpoint.
@@ -42,11 +47,12 @@ def translation():
     if form.validate_on_submit():
         text = form.text.data
         language = form.language.data
-        success, result = translate(text, languages.get(language))
+        src_lang = detect_language(text)
+        success, result = translate(text, src_lang, languages.get(language))
         if success:
             form.result.data = result
         else:
             show_error = True
             form.result.data = "Translation failed. Please check the error details."
 
-    return render_template('translation.html', form=form, show_error=show_error)
+    return render_template("translation.html", form=form, show_error=show_error)

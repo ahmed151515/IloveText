@@ -1,3 +1,4 @@
+import random
 import langid
 
 from transformers import M2M100Tokenizer
@@ -45,10 +46,14 @@ def IsToxic(text: str):
     return result.get("label") == "toxic"
 
 
-def translate(text: str, language: str, max_tokens: int = 150) -> str:
-    if IsToxic(text):
-        return (TOXIC_MASGEE, "")
+def translate(text: str, src_lang: str, targt_lang: str, max_tokens: int = 150) -> str:
+
+    if src_lang == "en":
+
+        if IsToxic(text):
+            return (TOXIC_MASGEE, "")
     tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_418M")
+    tokenizer.src_lang = src_lang
     tokenized_text = tokenizer.encode(text)
 
     chunks = [
@@ -64,56 +69,47 @@ def translate(text: str, language: str, max_tokens: int = 150) -> str:
             {
                 "inputs": chunk_text,
                 "parameters": {
-                    "forced_bos_token_id": tokenizer.get_lang_id(language),
+                    "forced_bos_token_id": tokenizer.get_lang_id(targt_lang),
                 },
             },
         )
         translated_chunks.append(result[0].get("generated_text"))
-
-    return (True," ".join(translated_chunks))
+    return (True, " ".join(translated_chunks))
 
 
 def detect_language(text: str) -> str:
     lang, confidence = langid.classify(text)
-    print(f"Detected language: {lang} with confidence {confidence}")
     return lang
 
 
 def summarize(text: str, model_id: str = "facebook/bart-large-cnn"):
-    try:
-        lang = detect_language(text)
-        
-        if lang != "en":
-            success, translated_text = translate(text, "en")
-            if not success:
-                return False, "img.jpeg"
-            text = translated_text
 
-        if IsToxic(text):
+    lang = detect_language(text)
+
+    if lang != "en":
+
+        success, translated_text = translate(text, lang, "en")
+
+        if not success:
             return False, "img.jpeg"
-
-        response = get_response_from_model(
-            model_id,
-            {
-                "inputs": text,
-                "parameters": {
-                    "do_sample": False,
-                },
-            },
-        )
-
-        if not response or "error" in response:
-            return False, "img.jpeg"
-
-        result = response[0].get("summary_text")
-        
-        if lang != "en":
-            success, translated_result = translate(result, lang)
-            if not success:
-                return False, "img.jpeg"
-            result = translated_result
-
-        return True, result
-    except Exception as e:
-        print(f"Summarization error: {str(e)}")
+        text = translated_text
+    if IsToxic(text):
         return False, "img.jpeg"
+
+    response = get_response_from_model(
+        model_id,
+        {
+            "inputs": text,
+            
+        },
+    )
+
+    result = response[0].get("summary_text")
+
+    if lang != "en":
+        success, translated_result = translate(result, "en", lang)
+        if not success:
+            return False, "img.jpeg"
+        result = translated_result
+
+    return True, result
